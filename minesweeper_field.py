@@ -1,3 +1,15 @@
-playingfield = [[ i for i in range(10)] for i in range(10)]
-#print(playingfield) uncomment to test
+FIELD_SIZE = 10
+EMPTY_CELL = 0
 
+
+def get_playing_field():
+    """
+
+    :return:
+    """
+    return [
+        [EMPTY_CELL for i in range(FIELD_SIZE)]
+        for i in range(FIELD_SIZE)
+    ]
+
+print(get_playing_field())
