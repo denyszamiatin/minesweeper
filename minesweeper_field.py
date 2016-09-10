@@ -19,7 +19,7 @@ def get_mined_field():
     """
     mined_field = []
     for i, j in enumerate(get_playing_field()):
-        j.insert(randint(i, FIELD_SIZE), 'M')
+        j.insert(randint(0, FIELD_SIZE), 'M')
         mined_field.append(j)
     return mined_field
 
