@@ -1,15 +1,28 @@
+from random import randint
 FIELD_SIZE = 10
 EMPTY_CELL = 0
 
 
 def get_playing_field():
     """
-
-    :return:
+    returns field for minesweeper game
     """
     return [
         [EMPTY_CELL for i in range(FIELD_SIZE)]
         for i in range(FIELD_SIZE)
     ]
 
-print(get_playing_field())
+
+def get_mined_field():
+    """
+    returns random mined field for game
+    """
+    mined_field = []
+    for i, j in enumerate(get_playing_field()):
+        j.insert(randint(i, FIELD_SIZE), 'M')
+        mined_field.append(j)
+    return mined_field
+
+print(get_mined_field())
+
+
