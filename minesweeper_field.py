@@ -54,6 +54,7 @@ for i in range(len(playground)):
     for j in range(len(playground[i])):
         print(playground[i][j], end=' ')
     print()
+
 print()
 
 #show mines q-ty
