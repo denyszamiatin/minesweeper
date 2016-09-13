@@ -62,3 +62,21 @@ for i in range(len(playground)):
     for j in range(len(playground[i])):
         print(mine_calculation(playground, i, j), end=' ')
     print()
+    
+#function for input of cell coordinates    
+def input_coordinates():
+    while True:
+        try:
+            x = int(raw_input('Write number of line from 0 to %s:' %(FIELD_SIZE-1)))
+            y = int(raw_input('Write number of line from 0 to %s:' %(FIELD_SIZE-1)))
+            if x >= FIELD_SIZE or y >= FIELD_SIZE:
+                raise TypeError
+        except ValueError:
+            print ('Wrong input, try again')
+        except TypeError:
+            print ('Your number of coordinate is out of field')
+        else:
+            break
+    return x, y
+
+print (input_coordinates())
