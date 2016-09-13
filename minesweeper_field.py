@@ -79,20 +79,20 @@ for i in range(len(field)):
     print()
     
     
-#function for input of cell coordinates
 def input_coordinates():
+    """
+    Inputs of cell coordinates
+    """
     while True:
         try:
-            x = int(raw_input('Write number of line from 0 to %s:' %(FIELD_SIZE-1)))
-            y = int(raw_input('Write number of line from 0 to %s:' %(FIELD_SIZE-1)))
-            if x >= FIELD_SIZE or y >= FIELD_SIZE:
+            x = int(input('Write number of line from 0 to %s:' %(FIELD_SIZE-1)))
+            y = int(input('Write number of line from 0 to %s:' %(FIELD_SIZE-1)))
+            if not is_coords_in_range(x, y):
                 raise TypeError
+            return x, y
         except ValueError:
-            print ('Wrong input, try again')
+            print('Wrong input, try again')
         except TypeError:
-            print ('Your number of coordinate is out of field')
-        else:
-            break
-    return x, y
+            print('Your number of coordinate is out of field')
 
-print (input_coordinates())
+print(input_coordinates())
