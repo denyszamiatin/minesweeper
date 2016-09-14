@@ -96,3 +96,10 @@ def input_coordinates():
             print('Your number of coordinate is out of field')
 
 print(input_coordinates())
+
+
+def creating_playing_field():
+    """"
+    creation of the playing field
+    """
+    get_playing_field()
