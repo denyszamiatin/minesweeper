@@ -26,8 +26,7 @@ def set_mines(field):
     """
     mines = 0
     while mines < MINES_QUANTITY:
-        x = get_random_coord(FIELD_SIZE)
-        y = get_random_coord(FIELD_SIZE)
+        x, y = get_random_coord(FIELD_SIZE), get_random_coord(FIELD_SIZE)
         if field[x][y] != EMPTY_CELL:
             continue
         field[x][y] = MINE
@@ -53,8 +52,7 @@ def mine_calculation(field, x, y):
     mines = 0
     for range_x in (-1, 0, 1):
         for range_y in (-1, 0, 1):
-            x_offset = x + range_x
-            y_offset = y + range_y
+            x_offset, y_offset = x + range_x, y + range_y
             if is_coords_in_range(x_offset, y_offset) and \
                     is_mine(x_offset, y_offset):
                 mines += 1
