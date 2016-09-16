@@ -102,4 +102,4 @@ def creating_playing_field():
     """"
     creation of the playing field
     """
-    get_playing_field()
+    return get_playing_field()
