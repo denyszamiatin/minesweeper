@@ -101,3 +101,16 @@ def creating_playing_field():
     creation of the playing field
     """
     return get_playing_field()
+
+
+inputs_cell = []   # Enter the list to store the "def input_coordinates():"
+def validated(x,y):
+    """
+    Check for repeated call to the cell
+    """
+    user_input_cell = (x, y)
+    if user_input_cell not in inputs_cell:
+        inputs_cell.append(user_input_cell)
+    else:
+        return False
+
