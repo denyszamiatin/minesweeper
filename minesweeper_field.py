@@ -114,3 +114,18 @@ def validated(x,y):
     else:
         return False
 
+def action(coords):
+	"""
+	Choose an action to open the cell or mark as Flag	
+	"""
+	while True:
+		act = input('Enter O - to open cell / F - to mark as FLAG')		
+		if act == 'O':
+			return 'O'
+		elif act == 'F':
+			return 'F'
+		else:
+			continue
+
+do_action = action(input_coordinates())
+
