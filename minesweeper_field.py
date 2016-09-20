@@ -4,15 +4,19 @@ FIELD_SIZE = 10
 MINES_QUANTITY = 10
 EMPTY_CELL = 0
 MINE = 'M'
+OPENED_CELL = 1
+MINE_SIGN = 'F'
+
+NUMBER_PROMPT = 'Write number of line from 0 to %s:'
 
 
-def get_playing_field():
+def create_field():
     """
     returns field for minesweeper game
     """
     return [
-        [EMPTY_CELL for i in range(FIELD_SIZE)]
-        for i in range(FIELD_SIZE)
+        [EMPTY_CELL for _ in range(FIELD_SIZE)]
+        for _ in range(FIELD_SIZE)
     ]
 
 
@@ -59,32 +63,14 @@ def mine_calculation(field, x, y):
     return mines
 
 
-field = set_mines(get_playing_field())
-
-
-#show playground with mines
-for row in field:
-    for cell in row:
-        print(cell, end=' ')
-    print()
-
-print()
-
-#show mines q-ty
-for i in range(len(field)):
-    for j in range(len(field[i])):
-        print(mine_calculation(field, i, j), end=' ')
-    print()
-    
-    
 def input_coordinates():
     """
     Inputs of cell coordinates
     """
     while True:
         try:
-            x = int(input('Write number of line from 0 to %s:' %(FIELD_SIZE-1)))
-            y = int(input('Write number of line from 0 to %s:' %(FIELD_SIZE-1)))
+            x = int(input(NUMBER_PROMPT % (FIELD_SIZE-1)))
+            y = int(input(NUMBER_PROMPT % (FIELD_SIZE-1)))
             if not is_coords_in_range(x, y):
                 raise TypeError
             return x, y
@@ -93,39 +79,40 @@ def input_coordinates():
         except TypeError:
             print('Your number of coordinate is out of field')
 
-print(input_coordinates())
 
-
-def creating_playing_field():
-    """"
-    creation of the playing field
-    """
-    return get_playing_field()
-
-
-inputs_cell = []   # Enter the list to store the "def input_coordinates():"
-def validated(x,y):
+def validate_action_coords(field, x, y):
     """
     Check for repeated call to the cell
     """
-    user_input_cell = (x, y)
-    if user_input_cell not in inputs_cell:
-        inputs_cell.append(user_input_cell)
-    else:
-        return False
+    return field[x][y] == EMPTY_CELL
 
-def action(coords):
-	"""
-	Choose an action to open the cell or mark as Flag	
-	"""
-	while True:
-		act = input('Enter O - to open cell / F - to mark as FLAG:  ')
-		if act == 'O':
-			return 'O'
-		elif act == 'F':
-			return 'F'
-		else:
-			continue
 
-do_action = action(input_coordinates())
+def action():
+    """
+    Choose an action to open the cell or mark as Flag
+    """
+    while True:
+        act = input('Enter O - to open cell / F - to mark as FLAG:  ').upper()
+        if act in ('O', 'F'):
+            return act
 
+do_action = action()
+
+
+bottom_field = create_field()
+top_field = create_field()
+field = set_mines(bottom_field)
+
+# show playground with mines
+for row in field:
+    for cell in row:
+        print(cell, end=' ')
+    print()
+
+print()
+
+# show mines q-ty
+for i in range(len(field)):
+    for j in range(len(field[i])):
+        print(mine_calculation(field, i, j), end=' ')
+    print()
