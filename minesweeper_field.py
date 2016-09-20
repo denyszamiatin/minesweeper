@@ -119,7 +119,7 @@ def action(coords):
 	Choose an action to open the cell or mark as Flag	
 	"""
 	while True:
-		act = input('Enter O - to open cell / F - to mark as FLAG')		
+		act = input('Enter O - to open cell / F - to mark as FLAG:  ')
 		if act == 'O':
 			return 'O'
 		elif act == 'F':
