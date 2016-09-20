@@ -116,3 +116,4 @@ for i in range(len(field)):
     for j in range(len(field[i])):
         print(mine_calculation(field, i, j), end=' ')
     print()
+
