@@ -117,3 +117,12 @@ for i in range(len(field)):
         print(mine_calculation(field, i, j), end=' ')
     print()
 
+def mark_mine(x, y, flag, playing_field):
+    """
+    marking filed
+    x, y -- from 'def input_coordinates():'
+    flag -- from 'def action(coords):'
+    playing_field -- from 'def creating_playing_field():'
+    """
+    if flag == 'F':
+        playing_field[x][y] = 'F'
