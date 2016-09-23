@@ -126,3 +126,14 @@ def mark_mine(x, y, flag, playing_field):
     """
     if flag == 'F':
         playing_field[x][y] = 'F'
+        
+
+def open_cell (x,y, field):
+    """ 
+    checking box on the presence of mines
+    """
+    if field[x][y] == EMPTY_CELL:
+        print ('Empty cell')
+        field[x][y] = mine_calculation(field, x, y)
+    if field[x][y] == MINE:
+        print ('You lost')
