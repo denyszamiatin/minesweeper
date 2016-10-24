@@ -1,32 +1,33 @@
 from random import randint
+import re
 
 FIELD_SIZE = 10
 MINES_QUANTITY = 10
-EMPTY_CELL = 0
+EMPTY_CELL = '.'
 MINE = 'M'
-OPENED_CELL = 1
-MINE_SIGN = 'F'
-
-NUMBER_PROMPT = 'Write number of line from 0 to %s:'
+NUMBER_PROMPT = '>> Enter \'X,Y\' coordinates in range (0 - %s): '
 
 
 def create_field():
     """
-    returns field for minesweeper game
+    Returns field for game
     """
     return [
         [EMPTY_CELL for _ in range(FIELD_SIZE)]
         for _ in range(FIELD_SIZE)
-    ]
+        ]
 
 
 def get_random_coord(field_size):
+    """
+    Returns random coordinate
+    """
     return randint(0, field_size - 1)
 
 
 def set_mines(field):
     """
-    returns random mined field for game
+    Returns random mined field for game
     """
     mines = 0
     while mines < MINES_QUANTITY:
@@ -42,25 +43,41 @@ def is_coords_in_range(x, y):
     return 0 <= x < FIELD_SIZE and 0 <= y < FIELD_SIZE
 
 
-def is_mine(x, y):
+def is_mine(field, x, y):
     return field[x][y] == MINE
 
 
-def mine_calculation(field, x, y):
+def mines_calculation(field):
     """
-    returns the quantity of mines in neighboring cells
+    Returns the quantity of mines in neighboring cells
     """
-    if field[x][y] == MINE:
-        return 'M'
+    for i in range(FIELD_SIZE):
+        for j in range(FIELD_SIZE):
+            if field[i][j] != MINE:
+                mines = 0
+                for range_x in (-1, 0, 1):
+                    for range_y in (-1, 0, 1):
+                        x_offset, y_offset = i + range_x, j + range_y
+                        if is_coords_in_range(x_offset, y_offset) and \
+                                is_mine(field, x_offset, y_offset):
+                            mines += 1
+                field[i][j] = mines
 
-    mines = 0
-    for range_x in (-1, 0, 1):
-        for range_y in (-1, 0, 1):
-            x_offset, y_offset = x + range_x, y + range_y
-            if is_coords_in_range(x_offset, y_offset) and \
-                    is_mine(x_offset, y_offset):
-                mines += 1
-    return mines
+            if field[i][j] == 0:
+                field[i][j] = '-'
+
+    return field
+
+
+def action():
+    """
+    Choose an action to open the cell or mark as Flag
+    """
+    while True:
+        print()
+        act = input('> Your input: ').upper()
+        if act in ('O', 'M', 'R', 'Q'):
+            return act
 
 
 def input_coordinates():
@@ -69,68 +86,110 @@ def input_coordinates():
     """
     while True:
         try:
-            x = int(input(NUMBER_PROMPT % (FIELD_SIZE-1)))
-            y = int(input(NUMBER_PROMPT % (FIELD_SIZE-1)))
+            input_str = input(NUMBER_PROMPT % (FIELD_SIZE - 1))
+            input_list = re.split(r',', input_str)
+            x, y = int(input_list[0]), int(input_list[1])
             if not is_coords_in_range(x, y):
                 raise TypeError
-            return x, y
+            return [y, x]
         except ValueError:
-            print('Wrong input, try again')
+            print('Wrong input. Enter your coordinates in \'X,Y\' format. Try again.')
+            print()
         except TypeError:
-            print('Your number of coordinate is out of field')
+            print('Your coordinates are out of range. Try again.')
+            print()
+        except IndexError:
+            print('Wrong input. Enter your coordinates in \'X,Y\' format. Try again.')
+            print()
 
 
-def validate_action_coords(field, x, y):
+def open_cell(field, x, y):
     """
-    Check for repeated call to the cell
+    Checking box on the presence of mines
     """
-    return field[x][y] == EMPTY_CELL
-
-
-def action():
-    """
-    Choose an action to open the cell or mark as Flag
-    """
-    while True:
-        act = input('Enter O - to open cell / F - to mark as FLAG:  ').upper()
-        if act in ('O', 'F'):
-            return act
-
-do_action = action()
-
-
-bottom_field = create_field()
-top_field = create_field()
-field = set_mines(bottom_field)
-
-# show playground with mines
-for row in field:
-    for cell in row:
-        print(cell, end=' ')
-    print()
-
-print()
-
-# show mines q-ty
-for i in range(len(field)):
-    for j in range(len(field[i])):
-        print(mine_calculation(field, i, j), end=' ')
-    print()
+    if field[x][y] != MINE:
+        return True
+    else:
+        return False
 
 
 def mark_mine(field, x, y):
     """
     Mark mine on the field
     """
-    field[x][y] = MINE_SIGN
-        
+    field[x][y] = MINE
+    return field
 
-def open_cell(field, x, y):
-    """ 
-    checking box on the presence of mines
+
+def remove_mark(field, x, y):
     """
-    if field[x][y] == EMPTY_CELL:
-        print ('Empty cell')
-        field[x][y] = mine_calculation(field, x, y)
-    if field[x][y] == MINE:
-        print ('You lost')
+    Remove mine's mark from the field
+    """
+    if field[x][y] != MINE:
+        pass
+    else:
+        field[x][y] = EMPTY_CELL
+    return field
+
+
+def show_field(field):
+    print()
+    print('   ', end='')
+    for digits in range(FIELD_SIZE):
+        print(digits, ' ', end='')
+    print()
+
+    for i in range(FIELD_SIZE):
+        print(i, ' ', end='')
+        for j in range(FIELD_SIZE):
+            print(field[i][j], ' ', end='')
+        print()
+
+
+def check_result(field):
+    result = 0
+    for i in range(FIELD_SIZE):
+        for j in range(FIELD_SIZE):
+            if top_field[i][j] == bottom_field[i][j]:
+                result += 1
+
+    if result == FIELD_SIZE ** 2:
+        print('\nCongratulation! You win!')
+        return True
+    else:
+        return False
+
+
+bottom_field = mines_calculation(set_mines(create_field()))
+top_field = create_field()
+
+print('Enter \'O\' to Open cell\n'
+      '      \'M\' to mark Mine\n'
+      '      \'R\' to Remove mark\n'
+      '      \'Q\' to Quit')
+
+show_field(top_field)
+
+while True:
+    do_action = action()
+
+    if do_action == 'Q':
+        break
+
+    position = input_coordinates()
+    x, y = position[0], position[1]
+
+    if do_action == 'O':
+        if open_cell(bottom_field, x, y) is True:
+            top_field[x][y] = bottom_field[x][y]
+        else:
+            top_field[x][y] = bottom_field[x][y]
+            print('You lose! There is a mine.')
+            break
+    elif do_action == 'M':
+        top_field = mark_mine(top_field, x, y)
+    else:
+        top_field = remove_mark(top_field, x, y)
+
+    if check_result(show_field(top_field)) == True:
+        break
